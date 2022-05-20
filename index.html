@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>PCD</title>
+		<title>Nuvem</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="./main.css">
@@ -57,7 +57,7 @@
 				//scene.add( new THREE.AxesHelper( 1 ) );
 
 				const loader = new PCDLoader();
-				loader.load( './Jardim.pcd', function ( points ) {
+				loader.load( './BUSTO_6.pcd', function ( points ) {
 
 					points.geometry.center();
 					points.geometry.rotateX( - Math.PI/2 );
