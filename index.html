@@ -7,10 +7,6 @@
 		<link type="text/css" rel="stylesheet" href="./main.css">
 	</head>
 	<body>
-		<div id="info">
-			<div>+/-: Increase/Decrease point size</div>
-			<div>c: Change color</div>
-		</div>
 
 		<!-- Import maps polyfill -->
 		<!-- Remove this when import maps will be widely supported -->
@@ -33,19 +29,24 @@
 
 			let camera, scene, renderer;
 
+			var pcloud = './BUSTO_11.pcd'
+
+			var tick = 0;
+
 			init();
-			render();
+			animate();
 
 			function init() {
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				var canvas = document.querySelector('#c');
+				renderer = new THREE.WebGLRenderer( {canvas, alpha:true} );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 
 				scene = new THREE.Scene();
 
-				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 0.01, 40 );
+				camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 0.01, 40 );
 				camera.position.set( 0, 2, 2 );
 				scene.add( camera );
 
@@ -54,22 +55,144 @@
 				controls.minDistance = 0.5;
 				controls.maxDistance = 10;
 
-				//scene.add( new THREE.AxesHelper( 1 ) );
+				//bustos
+
+				var busto;
 
 				const loader = new PCDLoader();
-				loader.load( './BUSTO_6.pcd', function ( points ) {
-
-					points.geometry.center();
-					points.geometry.rotateX( - Math.PI/2 );
-					scene.add( points );
-
-					render();
+				loader.load( './BUSTO_11.pcd', function ( points ) {
+					busto = points;
+					busto.geometry.center();
+					busto.geometry.rotateX( - Math.PI/2 );
+					busto.material.size = 0.015
+					scene.add(busto);
+					busto.visible = true;
 
 				} );
 
-				window.addEventListener( 'resize', onWindowResize );
+				var busto2;
 
-				window.addEventListener( 'keypress', keyboard );
+			
+				loader.load( './BUSTO_6.pcd', function ( points2 ) {			
+					busto2 = points2;
+					busto2.geometry.center();
+					busto2.geometry.rotateX( - Math.PI/2 );
+					busto2.geometry.scale( 0.7 , 0.7, 0.7 );
+					busto2.material.size = 0.015
+					scene.add( busto2);
+					busto2.visible = false;
+
+				} );
+
+				var busto3;
+
+			
+				loader.load( './BUSTO_7.pcd', function ( points3 ) {			
+					busto3 = points3;
+					busto3.geometry.center();
+					busto3.geometry.rotateX( - Math.PI/2 );
+					busto3.geometry.scale( 0.6 , 0.6, 0.6 );
+					busto3.material.size = 0.015
+					scene.add( busto3);
+					busto3.visible = false;
+
+				} );
+
+				var busto4;
+
+			
+				loader.load( './BUSTO_8.pcd', function ( points4 ) {			
+					busto4 = points4;
+					busto4.geometry.center();
+					busto4.geometry.rotateX( - Math.PI/2 );
+					busto4.geometry.scale( 0.6 , 0.6, 0.6 );
+					busto4.material.size = 0.015
+					scene.add( busto4);
+					busto4.visible = false;
+
+				} );
+
+				var busto5;
+
+			
+				loader.load( './BUSTO_10.pcd', function ( points5 ) {			
+					busto5 = points5;
+					busto5.geometry.center();
+					busto5.geometry.rotateX( - Math.PI/2 );
+					busto5.geometry.scale( 0.6 , 0.6, 0.6 );
+					busto5.material.size = 0.015
+					scene.add( busto5);
+					busto5.visible = false;
+
+				} );
+
+			
+
+				 //Rotatividade dos modelos
+
+  var state = 0;
+
+var rotatividade = function (event) {
+  state++;
+
+  if (state == 1) {
+
+  busto.visible = false;
+  busto2.visible = true;
+  busto3.visible = false;
+  busto4.visible = false;
+  busto5.visible = false;
+  
+
+
+} else if (state == 2) {
+
+  busto.visible = false;
+  busto2.visible = false;
+  busto3.visible = true;
+  busto4.visible = false;
+  busto5.visible = false;
+ 
+
+} else if (state == 3) {
+  
+	busto.visible = false;
+  busto2.visible = false;
+  busto3.visible = false;
+  busto4.visible = true;
+  busto5.visible = false;
+  
+
+} else if (state == 4) {
+  
+	busto.visible = false;
+  busto2.visible = false;
+  busto3.visible = false;
+  busto4.visible = false;
+  busto5.visible = true;
+ 
+} else if (state >= 5) {
+  state = 0;
+  
+  busto.visible = true;
+  busto2.visible = false;
+  busto3.visible = false;
+  busto4.visible = false;
+  busto5.visible = false;
+}
+};
+
+// formas de interacao
+
+document.querySelector('#c').addEventListener('mouseup', rotatividade, false);
+document.querySelector('#c').addEventListener('touchend', rotatividade, false);
+
+				
+
+				
+
+				window.addEventListener( 'resize', onWindowResize );
+				
 
 			}
 
@@ -81,37 +204,39 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
+			function animate() {
 
-			function keyboard( ev ) {
+requestAnimationFrame( animate );
 
-				const points = scene.getObjectByName( 'BUSTO_6.pcd' );
+render();
 
-				switch ( ev.key || String.fromCharCode( ev.keyCode || ev.charCode ) ) {
+}
 
-					case '+':
-						points.material.size *= 1.2;
-						break;
+function render() {
 
-					case '-':
-						points.material.size /= 1.2;
-						break;
 
-					case 'c':
-						points.material.color.setHex( Math.random() * 0xffffff );
-						break;
-
-				}
-
-				render();
-
-			}
-
-			function render() {
+				
 
 				renderer.render( scene, camera );
 
+				
 			}
 
 		</script>
+		<canvas id="c"></canvas>
+		 <div class="info">
+			<div class="message"><h3>Nuvem</h3><br>Pode interagir tocando e arrastando a tela</div>
+			<br />
+			<button class="ok" onclick="this.parentElement.style.display='none';">OK</button>
+		</div>
+		
+		
+		<div class="topnav">
+		  <a href="https://carlostrancoso.github.io/Lupa/">Anterior</a>
+		  <div class="topnav-right">
+			<a href="https://carlostrancoso.github.io/Persona/">Próximo</a>
+		  </div>
+		
+		</div>
 	</body>
 </html>
