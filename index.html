@@ -182,8 +182,7 @@ var rotatividade = function (event) {
 
 // formas de interacao
 
-document.querySelector('#c').addEventListener('mouseup', rotatividade, false);
-document.querySelector('#c').addEventListener('touchend', rotatividade, false);
+document.querySelector('#c').addEventListener('dblclick', rotatividade, false);
 
 				
 
@@ -223,7 +222,7 @@ function render() {
 		</script>
 		<canvas id="c"></canvas>
 		 <div class="info">
-			<div class="message"><h3>Nuvem</h3><br>Pode interagir tocando e arrastando a tela</div>
+			<div class="message"><h3>Nuvem</h3><br>Interaja tocando, arrastando e aumentando. Faça duplo clique para mudar o modelo.</div>
 			<br />
 			<button class="ok" onclick="this.parentElement.style.display='none';">OK</button>
 		</div>
