@@ -183,10 +183,19 @@ var rotatividade = function (event) {
 // formas de interacao
 
 document.querySelector('#c').addEventListener('dblclick', rotatividade, false);
+document.querySelector('#c').addEventListener("touchstart", tapHandler);
 
-				
+var tapedTwice = false;
 
-				
+function tapHandler(event) {
+    if(!tapedTwice) {
+        tapedTwice = true;
+        setTimeout( function() { tapedTwice = false; }, 300 );
+        return false;
+    }
+    event.preventDefault();
+    rotatividade();
+ }
 
 				window.addEventListener( 'resize', onWindowResize );
 				
@@ -222,7 +231,7 @@ function render() {
 		</script>
 		<canvas id="c"></canvas>
 		 <div class="info">
-			<div class="message"><h3>Nuvem</h3><br>Interaja tocando, arrastando e aumentando. Faça duplo clique para mudar o modelo.</div>
+			<div class="message"><h3>Nuvem</h3><br>Interaja tocando, arrastando e aumentando. Faça duplo clique para mudar.</div>
 			<br />
 			<button class="ok" onclick="this.parentElement.style.display='none';">OK</button>
 		</div>
